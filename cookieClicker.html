@@ -1,0 +1,142 @@
+<!-- 
+  Mukwaya Lwere's Cookie Clicker
+  This is a fun clicker game with a best score tracker and reset button.
+  Written: Saturday, July 19, 2025
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mukwaya Lwere's Cookie Clicker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #faf7ef;
+      text-align: center;
+      padding-top: 100px;
+      transition: background 0.4s;
+    }
+
+    #theCookie {
+      font-size: 5rem;
+      cursor: pointer;
+      margin: 0 auto;
+      transition: transform 0.2s;
+    }
+    #theCookie:hover {
+      transform: scale(1.07);
+    }
+
+    #cookieCount {
+      font-size: 2rem;
+      margin: 18px 0 5px 0;
+      color: #333;
+    }
+    #messageBox {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    #highScoreBox {
+      color: #8B6508;
+      font-size: 1.08rem;
+      margin-bottom: 18px;
+    }
+    #resetBtn {
+      margin-top: 30px;
+      padding: 11px 25px;
+      font-size: 1.15rem;
+      color: white;
+      background: #f29336;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #resetBtn:hover {
+      background: #ce700a;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mukwaya’s Cookie Clicker! 🍪</h1>
+
+  <!-- The cookie you click -->
+  <div id="theCookie" title="Click me for cookies">🍪</div>
+
+  <!-- Live count of how many times you clicked -->
+  <div id="cookieCount">Cookies: 0</div>
+
+  <!-- Where milestone and progress messages pop up -->
+  <div id="messageBox">Go on, grab a cookie!</div>
+
+  <!-- Shows the best run so far, saved for next time -->
+  <div id="highScoreBox">Your personal best: 0 cookies (Mukwaya Lwere)</div>
+
+  <!-- Lets you jump back to zero, but keeps your record! -->
+  <button id="resetBtn">Reset</button>
+  
+  <script>
+    // Grabbing what we need from the page. Feels a bit like finding snacks.
+    const cookieElem = document.getElementById("theCookie");
+    const countElem = document.getElementById("cookieCount");
+    const msgElem = document.getElementById("messageBox");
+    const highScoreBox = document.getElementById("highScoreBox");
+    const resetBtn = document.getElementById("resetBtn");
+    const pageBody = document.body;
+
+    // This holds today's cookie score
+    let cookieCount = 0;
+    // Let's see if we have a champion score saved from last time!
+    let bestCookies = 0;
+
+    // Check browser storage for a record. If so, show it.
+    if (localStorage.getItem("mukwayaBestCookies")) {
+      bestCookies = parseInt(localStorage.getItem("mukwayaBestCookies"));
+      highScoreBox.textContent = `Your personal best: ${bestCookies} cookies (Mukwaya Lwere)`;
+    }
+
+    // This runs whenever you click the cookie
+    cookieElem.addEventListener("click", function() {
+      cookieCount += 1;
+      countElem.textContent = `Cookies: ${cookieCount}`;
+
+      // If this run beats the old record, update and show it
+      if (cookieCount > bestCookies) {
+        bestCookies = cookieCount;
+        localStorage.setItem("mukwayaBestCookies", bestCookies);
+        highScoreBox.textContent = `Your personal best: ${bestCookies} cookies (Mukwaya Lwere)`;
+      }
+
+      // Fun, encouraging, sometimes silly messages at milestones
+      if (cookieCount === 10) {
+        msgElem.textContent = "You're getting the hang of this! (Mukwaya cheers)";
+        pageBody.style.background = "#fffbe2";
+      } else if (cookieCount === 25) {
+        msgElem.textContent = "25! You must really like cookies 🚀";
+        pageBody.style.background = "#ffe1e1";
+      } else if (cookieCount === 50) {
+        msgElem.textContent = "Half a hundred! Mukwaya is amazed 😲";
+        pageBody.style.background = "#defacd";
+      } else if (cookieCount === 100) {
+        msgElem.textContent = "100 cookies?! Mukwaya says: Break time! 💯";
+        pageBody.style.background = "#dde7f8";
+      } else if (cookieCount > 100 && cookieCount % 25 === 0) {
+        msgElem.textContent = `Overtime! Keep going, Cookie Champ! Score: ${cookieCount}`;
+      } else if (cookieCount < 10) {
+        msgElem.textContent = "Keep clicking for more cookies!";
+      }
+    });
+
+    // Start over but keep the high score for bragging
+    resetBtn.addEventListener("click", function() {
+      cookieCount = 0;
+      countElem.textContent = "Cookies: 0";
+      msgElem.textContent = "Cookies reset. Ready for another run?";
+      pageBody.style.background = "#faf7ef";
+    });
+  </script>
+
+</body>
+</html>
