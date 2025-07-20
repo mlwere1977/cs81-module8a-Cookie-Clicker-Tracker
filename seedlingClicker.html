@@ -1,0 +1,160 @@
+<!-- 
+  Mukwaya Lwere's Seedling Grower Game 🌱
+  A fun clicker about growing with persistence!
+  Updated: July 20, 2025
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mukwaya's Seedling Clicker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding-top: 90px;
+      transition: background 0.4s;
+    }
+
+    #seedlingBtn {
+      font-size: 5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    #seedlingBtn:hover {
+      transform: scale(1.1);
+    }
+
+    #clickDisplay {
+      font-size: 2rem;
+      margin: 20px 0 10px;
+      color: #222;
+    }
+
+    #growthMessage {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    #recordScore {
+      color: #785a00;
+      font-size: 1.05rem;
+      margin-bottom: 25px;
+    }
+
+    #clearButton {
+      padding: 12px 26px;
+      font-size: 1rem;
+      background: #28a745;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #clearButton:hover {
+      background: #1e7c31;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌱 Mukwaya's Seedling Growth Tracker</h1>
+
+  <!-- User will click this emoji to "grow" their seedlings -->
+  <div id="seedlingBtn" title="Click to grow your seedling!">🌱</div>
+
+  <!-- Tracks how many seedling clicks you’ve done -->
+  <div id="clickDisplay">Seedlings grown: 0</div>
+
+  <!-- Personalized messaging for motivation -->
+  <div id="growthMessage">Start growing your garden, one seedling at a time.</div>
+
+  <!-- Best total score saved in localStorage -->
+  <div id="recordScore">Your top record: 0 seedlings (Mukwaya's progress)</div>
+
+  <!-- Resets current game but keeps record -->
+  <button id="clearButton">Reset Count</button>
+
+  <script>
+    // Grab the page elements we’ll play with
+    const seedling = document.getElementById("seedlingBtn");
+    const counterDisplay = document.getElementById("clickDisplay");
+    const messageArea = document.getElementById("growthMessage");
+    const scoreRecordBox = document.getElementById("recordScore");
+    const resetTracker = document.getElementById("clearButton");
+    const background = document.body;
+
+    // Track how many clicks the user has made 🌱
+    let totalClicks = 0;
+    let topRecord = 0;
+
+    // Check if there's a best score saved already
+    const savedRecord = localStorage.getItem("mukwayaBestSeedlings");
+    if (savedRecord) {
+      topRecord = parseInt(savedRecord);
+      scoreRecordBox.textContent = `Your top record: ${topRecord} seedlings (Mukwaya's progress)`;
+    }
+
+    // Little helper function to change background colors randomly
+    function getRandomPastelColor() {
+      const red = Math.floor(Math.random() * 156 + 100);
+      const green = Math.floor(Math.random() * 156 + 100);
+      const blue = Math.floor(Math.random() * 156 + 100);
+      return `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    // Handle growth clicks
+    seedling.addEventListener("click", function () {
+      totalClicks += 1;
+      counterDisplay.textContent = `Seedlings grown: ${totalClicks}`;
+
+      // Save new high score if needed
+      if (totalClicks > topRecord) {
+        topRecord = totalClicks;
+        localStorage.setItem("mukwayaBestSeedlings", topRecord);
+        scoreRecordBox.textContent = `Your top record: ${topRecord} seedlings (Mukwaya's progress)`;
+      }
+
+      // Growing messages at click milestones
+      switch (totalClicks) {
+        case 10:
+          messageArea.textContent = "You're getting the hang of growing 🌱 – Mukwaya";
+          background.style.background = getRandomPastelColor();
+          break;
+        case 25:
+          messageArea.textContent = "📈 Mukwaya your clicks are growing!";
+          background.style.background = getRandomPastelColor();
+          break;
+        case 50:
+          messageArea.textContent = "🏆 Half hundred! Mukwaya Level up!";
+          background.style.background = getRandomPastelColor();
+          break;
+        case 100:
+          messageArea.textContent = "👀 100 seedlings Mukwaya! Break time 100% 💯";
+          background.style.background = getRandomPastelColor();
+          break;
+        default:
+          if (totalClicks > 100 && totalClicks % 25 === 0) {
+            messageArea.textContent = `Still planting! Total: ${totalClicks} 🌱`;
+            background.style.background = getRandomPastelColor();
+          }
+          break;
+      }
+    });
+
+    // Reset button resets current count, leaves high score
+    resetTracker.addEventListener("click", function () {
+      totalClicks = 0;
+      counterDisplay.textContent = "Seedlings grown: 0";
+      messageArea.textContent = "Reset complete. Ready to grow again 🌿";
+      background.style.background = "#f0f0f0";
+    });
+  </script>
+
+</body>
+</html>
